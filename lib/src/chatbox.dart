@@ -83,7 +83,7 @@ class ChatBox extends StatefulWidget {
   final TranslateConversations? translateConversations;
   final List<String> highlightedWords = const <String>[];
   final MessagePredicate messageFilter;
-  final NavigationActionPolicy Function(
+  final bool Function(
     InAppWebViewController controller,
     NavigationAction navigationAction,
   )? onUrlNavigation;
@@ -268,7 +268,9 @@ class ChatBoxState extends State<ChatBox> {
         }
 
         if (widget.onUrlNavigation != null) {
-          return widget.onUrlNavigation!(controller, navigationAction);
+          return widget.onUrlNavigation!(controller, navigationAction)
+              ? NavigationActionPolicy.ALLOW
+              : NavigationActionPolicy.CANCEL;
         }
 
         return NavigationActionPolicy.ALLOW;
