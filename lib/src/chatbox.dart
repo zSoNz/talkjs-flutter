@@ -87,6 +87,7 @@ class ChatBox extends StatefulWidget {
     InAppWebViewController controller,
     NavigationAction navigationAction,
   )? onUrlNavigation;
+  final void Function(String controller)? onWebViewMessage;
   final Conversation? conversation;
   final bool? asGuest;
 
@@ -113,6 +114,7 @@ class ChatBox extends StatefulWidget {
     this.onUrlNavigation,
     this.onLoadingStateChanged,
     this.onCustomMessageAction,
+    this.onWebViewMessage,
   }) : super(key: key);
 
   @override
@@ -222,6 +224,9 @@ class ChatBoxState extends State<ChatBox> {
       onLoadStop: _onLoadStop,
       onConsoleMessage:
           (InAppWebViewController controller, ConsoleMessage message) {
+        if (widget.onWebViewMessage != null) {
+          widget.onWebViewMessage!(message.message);
+        }
         print("chatbox [${message.messageLevel}] ${message.message}");
       },
       gestureRecognizers: {
